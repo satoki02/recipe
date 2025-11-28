@@ -1,0 +1,100 @@
+{% extends 'main/base.html' %}
+
+{% block title %} All Items {% endblock %}
+
+{% block content %}
+
+    <div class="pb-6 grid grid-cols-4 gap-6"> 
+        
+        <div class="col-span-1 p-4 bg-gray-800 rounded-xl shadow-lg">
+            
+            <form method="get" action="{% url 'item:items' %}">
+                <input name="query" 
+                       class="w-full py-3 px-4 mb-2 text-lg border border-gray-600 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400" 
+                       type="text" 
+                       value="{{ query|default:'' }}" 
+                       placeholder="Food Name">
+
+                <button class="w-full py-3 text-white text-lg font-semibold bg-teal-600 hover:bg-teal-500 rounded-lg transition duration-200"> 
+                    Search 
+                </button>
+            </form>
+
+            <hr class="my-6 border-gray-600">
+            
+            <p class="font-bold text-xl text-white mb-3">Categories</p>
+            
+            <ul>
+                <li class="mb-1">
+                    <a href="{% url 'item:items' %}?query={{ query|default:'' }}&category=0" 
+                       class="block py-2 px-3 text-lg rounded-lg transition duration-200 
+                              {% if category_id == 0 %} 
+                                  bg-teal-700 text-white font-semibold 
+                              {% else %} 
+                                  text-gray-300 hover:bg-gray-700 
+                              {% endif %}">
+                        All Categories 
+                    </a>
+                </li>
+                
+                {% for c in category %} 
+                    <li class="mb-1">
+                        <a href="{% url 'item:items' %}?query={{ query|default:'' }}&category={{ c.id }}" 
+                           class="block py-2 px-3 text-lg rounded-lg transition duration-200 
+                                 {% if c.id|stringformat:'s' == category_id|stringformat:'s' %} 
+                                     bg-teal-700 text-white font-semibold 
+                                 {% else %} 
+                                     text-gray-300 hover:bg-gray-700 
+                                 {% endif %}">
+                            {{ c.name }} 
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <hr class="my-6 border-gray-600">
+
+            <a href="{% url 'item:items' %}" 
+               class="w-full text-center py-3 inline-block bg-yellow-600 hover:bg-yellow-500 text-lg font-semibold rounded-lg text-white transition duration-200">
+                Clear Filters
+            </a>
+
+        </div>
+
+        <div class="col-span-3 p-4 bg-gray-900 rounded-xl shadow-lg">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                {% for item in items %}
+                
+                    <div class='transform hover:scale-105 transition duration-300 ease-in-out'> 
+                        <a href="{% url 'item:detail' item.id %}">
+                            
+                            <div class="bg-gray-800 border border-gray-700 rounded-xl overflow-hidden shadow-xl h-full flex flex-col">
+                                
+                                <div class="relative w-full h-48 overflow-hidden">
+                                    {% if item.image %}
+                                        <img src="{{ item.image.url }}" alt="{{ item.name }}" class="object-cover w-full h-full">
+                                    {% else %}
+                                        <div class="w-full h-full flex items-center justify-center bg-gray-700 text-gray-400 text-center">
+                                            No Image
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="p-3 bg-gray-700 text-white flex flex-col flex-grow justify-center">
+                                    <h4 class="font-bold text-xl truncate text-teal-400">Name: {{ item.name }}</h4>
+                                    <p class="text-sm font-light mt-1">Category: {{ item.category }}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    
+                {% empty %}
+                <div class="col-span-3 text-center py-10 text-xl text-gray-400">
+                    No recipes found matching your criteria. Try adjusting your search or filters.
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'main/base.html' %}
+
+{% block title %} Signup Form {% endblock %}
+
+{% block content %}
+<div class="flex justify-center items-center py-12">
+    <div class="w-full md:w-1/2 lg:w-1/3 p-8 bg-gray-800 rounded-xl shadow-2xl"> {# Changed from bg-orange-600 to bg-gray-800 #}
+        <h1 class="mb-8 text-4xl text-center text-white font-extrabold">Sign Up</h1>
+
+        <form method="post" action=".">
+            {% csrf_token %} 
+            
+            <div class='mb-4'>
+                <label class="block mb-2 text-white font-semibold text-lg" for="{{ form.username.id_for_label }}">Username</label>
+                {{ form.username }}
+            </div>
+
+            <div class='mb-4'>
+                <label class="block mb-2 text-white font-semibold text-lg" for="{{ form.email.id_for_label }}">Email</label>
+                {{ form.email }}
+            </div>
+
+            <div class='mb-4'>
+                <label class="block mb-2 text-white font-semibold text-lg" for="{{ form.password1.id_for_label }}">Password</label>
+                {{ form.password1 }}
+            </div>
+
+            <div class='mb-6'>
+                <label class="block mb-2 text-white font-semibold text-lg" for="{{ form.password2.id_for_label }}">Repeat Password</label>
+                {{ form.password2 }}
+            </div>
+
+            {% if form.error or form.non_field_errors %}
+                <div class="mb-6 p-4 bg-red-800 text-white rounded-lg">
+                    {% for field in form %}
+                        {{ field.errors }}
+                    {% endfor %}
+                    
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+            
+            <div class="flex justify-center">
+                <button class="py-3 px-8 text-xl font-bold bg-teal-600 hover:bg-teal-500 rounded-xl text-white transition duration-200 shadow-md"> 
+                    Submit 
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

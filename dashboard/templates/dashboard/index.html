@@ -1,0 +1,23 @@
+{% extends 'main/base.html' %}
+{% block title %} Dashboard  {% endblock %}
+
+{% block content %}
+
+<div class="grid grid-cols-3 gap-4 mt-4">
+    {% for item in items %}
+    <div class='magnify'> 
+        <div class="bg-orange-700 p-2 rounded-xl">
+            <a href="{% url 'item:detail' item.id %}">
+                <div class="mb-1">
+                    <img src="{{ item.image.url }}" class="rounded-t-xl" style="width:100%">
+                </div>
+                <div class="p-2 bg-orange-600 rounded-b-xl " style="width:100% ' hover:width:120%">
+                    <h4 class="text-semibold text-2xl"><strong>Name: {{ item.name }} </strong> </h4>
+                    <p class="text-semibold text-2xl"> Country: {{ item.category }} </p>
+                </div>
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

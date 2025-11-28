@@ -1,0 +1,65 @@
+{% extends 'main/base.html' %}
+
+{% block title %} {{ item.name }} {% endblock %}
+
+{% block content %}
+    <div class="grid grid-cols-5 gap-6 bg-black rounded-xl">
+        <div class="col-span-2 bg-orange-500 p-1 rounded-xl m-1">
+            <img src="{{ item.image.url }}" class="rounded-xl">
+        </div>
+        <div class="col-span-3 p-6  ">
+            <h6 class="mt-2 mb-2 text-orange-500"> Created on: {{ item.created_at }} </h6>
+            <h1 class="mb-6 text-3xl text-orange-700 hover:text-orange-500 ">{{ item.name }} </h1>
+            <p class="text-orange-700"><strong> Uploaded By:</strong> {{ item.created_by }} </p>
+            {% if item.description %}
+                <p class="text-orange-700 mt-4 "> <strong class="text-3xl"> Description:</strong> <br> {{ item.description }} </p>
+            {% endif %}
+            {% if item.ingredient %}
+                <p class="text-orange-700 mt-4 "> <strong class="text-3xl"> Ingredients Required:</strong> <br>{{ item.ingredient }}</p>
+            {% endif %}
+            {% if item.process %}
+                <p class="text-orange-700 mt-4 "> <strong class="text-3xl"> Process To Make:</strong> <br> {{ item.process }} </p>
+            {% endif %}
+
+            {% if request.user == item.created_by %}
+    <div class="mt-6 p-6 bg-gray-800 rounded-xl shadow-2xl max-w-md mx-auto 
+                flex flex-col items-center"> {# Added flex flex-col items-center #}
+        
+        <p class="text-white text-lg mb-4 text-center">This is your item.</p> {# Added text-center #}
+        
+        <div class="flex space-x-4">
+            <a href="{% url 'item:edit' item.id %}" 
+               class="px-6 py-3 text-lg font-semibold bg-teal-600 hover:bg-teal-500 text-white rounded-xl transition duration-200">
+                Edit
+            </a>
+            <a href="{% url 'item:delete' item.id %}" 
+               class="px-6 py-3 text-lg font-semibold bg-red-600 hover:bg-red-500 text-white rounded-xl transition duration-200">
+                Delete
+            </a>
+        </div>
+    </div>
+{% endif %}
+
+            
+        </div>
+    </div>
+
+    <div class="p-2 m-2 bg-black text-center text-2xl w-4/4 rounded-xl">
+            <h2 class="border-b  border-orange-700 text-orange-700"><strong>Related Recipes</strong></h2>
+            <div class="grid grid-cols-3 gap-2 mt-4 bg-black rounded-xl">
+                {% for item in related_items %}
+                <div class=" bg-orange-700 p-1 rounded-xl">
+                    <a href="{% url 'item:detail' item.id %}">
+                        <div >
+                            <img src="{{ item.image.url }}" class=" rounded-t-xl " style="width:100%">
+                        </div>
+                        <div class="p-2 rounded-b-xl bg-orange-500 mt-1 ">
+                            <h4 class="text-semibold "><strong>Name: {{ item.name }}</strong> </h4>
+                            <p class="text-semibold ">Country: {{ item.category }} </p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+{% endblock %}
